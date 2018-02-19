@@ -1,0 +1,7 @@
+# IntelliJ project files
+*.iml
+.idea/
+
+# Binaries
+*.jar
+*.class

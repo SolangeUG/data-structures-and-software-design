@@ -1,6 +1,6 @@
 # Data Structures And Software Design
 
-[![MIT License](https://img.shields.io/badge/license-MIT%20License-green.svg)](https://github.com/SolangeUG/web-programming/blob/master/LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT%20License-green.svg)](https://github.com/SolangeUG/data-structures-and-software-design/blob/master/LICENSE)
 [![Java Platform](https://img.shields.io/badge/platform-Java-blue.svg)](https://docs.oracle.com/en/java/)
 
 This is a collection of projects specified in the PennEngineering Extension School's [Data Structures and Software Design](https://www.edx.org/course/data-structures-software-design-pennx-sd2x) course.

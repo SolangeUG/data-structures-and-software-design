@@ -53,8 +53,6 @@ public class LinkedListUtils {
 	 */
 	public static void removeMaximumValues(LinkedList<String> list, int N) {
 
-		// TODO: find an optimized way to do this (without using additional list and array)!
-
 		if (list != null && N > 0) {
 
 			int ndx = 0;

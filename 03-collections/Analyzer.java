@@ -41,10 +41,6 @@ public class Analyzer {
 		return sentences;
 
 	}
-	
-	/*
-	 * Implement this method in Part 2
-	 */
 
     /**
      * Return a set of all the words from a list of sentences
@@ -53,15 +49,44 @@ public class Analyzer {
      */
 	public static Set<Word> allWords(List<Sentence> sentences) {
 
-		/* IMPLEMENT THIS METHOD! */
-		
-		return null; // this line is here only so this code will compile if you don't modify it
+		Set<Word> wordSet = new HashSet<>();
+		HashMap<String, Word> wordMap = new HashMap<>();
 
+		if (sentences != null && !sentences.isEmpty()) {
+			// store all the strings in sentences into a hash map
+			for (Sentence sentence: sentences) {
+
+				// split each sentence in individual words
+				String[] strings = sentence.getText().toLowerCase().split("\\s");
+				for (String string : strings) {
+
+					// ignore the ones that do not start with a letter (for example: 's will be ignored).
+					if (string.matches("[a-z]+|[a-z]+\\p{Punct}")) {
+
+						// ignore the punctuation at the end of the word if applicable
+						if (string.matches("[a-z]+\\p{Punct}")) {
+							string = string.substring(0, string.length() - 1);
+						}
+
+						// we're ready to work with a word object
+						Word word;
+						if (wordMap.keySet().contains(string)) {
+							word = wordMap.get(string);
+						} else {
+							word = new Word(string);
+						}
+						word.increaseTotal(sentence.getScore());
+						wordMap.put(string, word);
+					}
+				}
+			}
+
+			// add all the generated Word objects to the set
+			wordSet.addAll(wordMap.values());
+		}
+
+		return wordSet;
 	}
-	
-	/*
-	 * Implement this method in Part 3
-	 */
 
     /**
      * Calculate the score of words
@@ -69,10 +94,8 @@ public class Analyzer {
      * @return a map of words and their scores
      */
 	public static Map<String, Double> calculateScores(Set<Word> words) {
-
-		/* IMPLEMENT THIS METHOD! */
 		
-		return null; // this line is here only so this code will compile if you don't modify it
+		return null;
 
 	}
 	
@@ -131,15 +154,30 @@ public class Analyzer {
 			System.out.println("Please specify the name of the input file");
 			System.exit(0);
 		}
+
 		String filename = args[0];
 		System.out.print("Please enter a sentence: ");
 		Scanner in = new Scanner(System.in);
 		String sentence = in.nextLine();
 		in.close();
+
 		List<Sentence> sentences = Analyzer.readFile(filename);
 		Set<Word> words = Analyzer.allWords(sentences);
 		Map<String, Double> wordScores = Analyzer.calculateScores(words);
 		double score = Analyzer.calculateSentenceScore(wordScores, sentence);
 		System.out.println("The sentiment score is " + score);
+
+		/*
+		String text = "It 's a hard knock life for us!";
+		String[] tokens = text.toLowerCase().split(" ");
+		for (String string: tokens) {
+			if (string.matches("[a-z]+|[a-z]+\\p{Punct}")) {
+				if (string.matches("[a-z]+\\p{Punct}")) {
+					string = string.substring(0, string.length()-1);
+				}
+				System.out.println(string);
+			}
+		}
+		*/
 	}
 }

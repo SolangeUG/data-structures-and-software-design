@@ -56,28 +56,19 @@ public class Analyzer {
 			// store all the strings in sentences into a hash map
 			for (Sentence sentence: sentences) {
 
-				// split each sentence in individual words
-				String[] strings = sentence.getText().toLowerCase().split("\\s");
+				// split each sentence into individual valid words
+				List<String> strings = getStringsFromSentence(sentence.getText());
+
 				for (String string : strings) {
-
-					// ignore the ones that do not start with a letter (for example: 's will be ignored).
-					if (string.matches("[a-z]+|[a-z]+\\p{Punct}")) {
-
-						// ignore the punctuation at the end of the word if applicable
-						if (string.matches("[a-z]+\\p{Punct}")) {
-							string = string.substring(0, string.length() - 1);
-						}
-
-						// we're ready to work with a word object
-						Word word;
-						if (wordMap.keySet().contains(string)) {
-							word = wordMap.get(string);
-						} else {
-							word = new Word(string);
-						}
-						word.increaseTotal(sentence.getScore());
-						wordMap.put(string, word);
+					// we're ready to work with a word object
+					Word word;
+					if (wordMap.keySet().contains(string)) {
+						word = wordMap.get(string);
+					} else {
+						word = new Word(string);
 					}
+					word.increaseTotal(sentence.getScore());
+					wordMap.put(string, word);
 				}
 			}
 
@@ -94,14 +85,21 @@ public class Analyzer {
      * @return a map of words and their scores
      */
 	public static Map<String, Double> calculateScores(Set<Word> words) {
-		
-		return null;
 
+		Map<String, Double> scores = new HashMap<>();
+
+		if (words != null && ! words.isEmpty()) {
+			// for each non null word in the set, calculate and store its score
+			for (Word word: words) {
+				if (word != null) {
+					double score = word.calculateScore();
+					scores.put(word.getText(), score);
+				}
+			}
+		}
+
+		return scores;
 	}
-	
-	/*
-	 * Implement this method in Part 4
-	 */
 
     /**
      * Determine the sentiment analysis score of a sentence
@@ -111,10 +109,20 @@ public class Analyzer {
      */
 	public static double calculateSentenceScore(Map<String, Double> wordScores, String sentence) {
 
-		/* IMPLEMENT THIS METHOD! */
-		
-		return 0; // this line is here only so this code will compile if you don't modify it
+		double sentenceScore = 0;
 
+		if (wordScores != null && !wordScores.isEmpty()) {
+			// retrieve a list of words from the sentence
+			List<String> words = getStringsFromSentence(sentence);
+
+			// calculate the total cumulative score of the sentence
+			for (String word: words) {
+				if (wordScores.containsKey(word)) {
+					sentenceScore += wordScores.get(word);
+				}
+			}
+		}
+		return sentenceScore;
 	}
 
     /**
@@ -143,6 +151,31 @@ public class Analyzer {
         }
 	    return sentence;
     }
+
+	/**
+	 * Return a list of valid words from a sentence
+	 * @param sentence the input text
+	 * @return a list of its words
+	 */
+	private static List<String> getStringsFromSentence(String sentence) {
+		List<String> strings = new LinkedList<>();
+
+		if (sentence != null && !sentence.isEmpty()) {
+			String[] tokens = sentence.toLowerCase().split("\\s");
+			for (String token : tokens) {
+				// retain only words that start with a letter
+				if (token.matches("[a-z]+|[a-z]+\\p{Punct}")) {
+
+					// ignore the punctuation at the end of the word if applicable
+					if (token.matches("[a-z]+\\p{Punct}")) {
+						token = token.substring(0, token.length() - 1);
+					}
+					strings.add(token);
+				}
+			}
+		}
+		return strings;
+	}
 
 
     /**

@@ -44,7 +44,6 @@ public class HtmlReader {
 		while ((ch = stream.read()) > 0) {
 			buffer.append((char) ch);
 		}
-		stream.close();
 		String htmlFileString = buffer.toString();
 		return HtmlTag.tokenize(htmlFileString);
 	}
@@ -68,7 +67,8 @@ public class HtmlReader {
 				response = "YES";
 			}
 			System.out.println("Is file valid? " + response);
-
+			htmlFile.close();
+			
 		} catch (IOException exception) {
 			System.out.println("IOException : " + exception.getMessage());
 		} catch (Exception otherException) {

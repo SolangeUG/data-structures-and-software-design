@@ -68,7 +68,7 @@ public class HtmlReader {
 			}
 			System.out.println("Is file valid? " + response);
 			htmlFile.close();
-			
+
 		} catch (IOException exception) {
 			System.out.println("IOException : " + exception.getMessage());
 		} catch (Exception otherException) {

@@ -134,7 +134,7 @@ public class Analyzer {
 	private static Sentence getSentence(String line) {
 	    Sentence sentence = null;
 
-	    if (line != null && !line.isEmpty()) {
+	    if (line != null && !line.isEmpty() && !line.matches("\\s")) {
             try {
 
                 int endNdx = 1;

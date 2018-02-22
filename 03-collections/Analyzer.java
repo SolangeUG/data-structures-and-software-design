@@ -21,22 +21,28 @@ public class Analyzer {
 
 	    List<Sentence> sentences = new LinkedList<>();
 
-	    try {
-            InputStream stream = new FileInputStream(filename);
-            Scanner scanner = new Scanner(stream);
-            while(scanner.hasNextLine()) {
-                String textLine = scanner.nextLine();
-                Sentence sentence = getSentence(textLine);
-                if (sentence != null) {
-                    sentences.add(sentence);
-                }
-            }
-            scanner.close();
-            stream.close();
-	    } catch (IOException exception) {
-            System.out.println("IOException: " + exception.getMessage());
-            exception.printStackTrace();
-        }
+	    if (filename != null && !filename.isEmpty()) {
+
+			try {
+
+				InputStream stream = Analyzer.class.getClassLoader()
+						.getResourceAsStream(filename);
+				Scanner scanner = new Scanner(stream);
+				while(scanner.hasNextLine()) {
+					String textLine = scanner.nextLine();
+					Sentence sentence = getSentence(textLine);
+					if (sentence != null) {
+						sentences.add(sentence);
+					}
+				}
+				scanner.close();
+				stream.close();
+			} catch (IOException exception) {
+				System.out.println("IOException: " + exception.getMessage());
+				exception.printStackTrace();
+			}
+
+		}
 
 		return sentences;
 
@@ -56,19 +62,21 @@ public class Analyzer {
 			// store all the strings in sentences into a hash map
 			for (Sentence sentence: sentences) {
 
-				// split each sentence into individual valid words
-				List<String> strings = getStringsFromSentence(sentence.getText());
+				if (sentence != null) {
+					// split each sentence into individual valid words
+					List<String> strings = getStringsFromSentence(sentence.getText());
 
-				for (String string : strings) {
-					// we're ready to work with a word object
-					Word word;
-					if (wordMap.keySet().contains(string)) {
-						word = wordMap.get(string);
-					} else {
-						word = new Word(string);
+					for (String string : strings) {
+						// we're ready to work with a word object
+						Word word;
+						if (wordMap.keySet().contains(string)) {
+							word = wordMap.get(string);
+						} else {
+							word = new Word(string);
+						}
+						word.increaseTotal(sentence.getScore());
+						wordMap.put(string, word);
 					}
-					word.increaseTotal(sentence.getScore());
-					wordMap.put(string, word);
 				}
 			}
 
@@ -137,11 +145,10 @@ public class Analyzer {
 	    if (line != null && !line.isEmpty() && !line.matches("\\s")) {
             try {
 
-                int endNdx = 1;
-                if (line.startsWith("-")) endNdx = 2;
+                String[] tokens = line.split("\\s");
+                int score = Integer.valueOf(tokens[0]);
 
-                int score = Integer.valueOf(line.substring(0, endNdx));
-	            String text = line.substring(endNdx);
+	            String text = tokens[1];
 	            sentence = new Sentence(score, text);
 
             } catch (NumberFormatException exception) {
@@ -211,6 +218,10 @@ public class Analyzer {
 				System.out.println(string);
 			}
 		}
+
+		String text = "4 what Did you do?";
+		String[] tokens = text.split("\\s");
+		System.out.println(tokens[0]);
 		*/
 	}
 }

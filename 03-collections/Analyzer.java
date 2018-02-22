@@ -1,5 +1,3 @@
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -37,9 +35,8 @@ public class Analyzer {
 				}
 				scanner.close();
 				stream.close();
-			} catch (IOException exception) {
-				System.out.println("IOException: " + exception.getMessage());
-				exception.printStackTrace();
+			} catch (Exception exception) {
+				System.out.println("Exception : " + exception.getMessage());
 			}
 
 		}
@@ -119,15 +116,20 @@ public class Analyzer {
 
 		double sentenceScore = 0;
 
-		if (wordScores != null && !wordScores.isEmpty()) {
+		if (wordScores != null && !wordScores.isEmpty()
+				&& sentence != null && !sentence.isEmpty()) {
 			// retrieve a list of words from the sentence
 			List<String> words = getStringsFromSentence(sentence);
 
-			// calculate the total cumulative score of the sentence
-			for (String word: words) {
-				if (wordScores.containsKey(word)) {
-					sentenceScore += wordScores.get(word);
+			// does the sentence contain valid words only?
+			if (words.size() > 0) {
+				// calculate the total cumulative score of the sentence
+				for (String word : words) {
+					if (wordScores.containsKey(word)) {
+						sentenceScore += wordScores.get(word);
+					}
 				}
+				sentenceScore = sentenceScore / (double) words.size();
 			}
 		}
 		return sentenceScore;
@@ -146,14 +148,22 @@ public class Analyzer {
             try {
 
                 String[] tokens = line.split("\\s");
-                int score = Integer.valueOf(tokens[0]);
+                double scoreToken = Double.valueOf(tokens[0]);
 
-	            String text = tokens[1];
-	            sentence = new Sentence(score, text);
+                // only scores of -2.0, -1.0, 0, 1.0 and 2.0 are allowed!
+				if (isValidScore(scoreToken)) {
+					int score = (int) scoreToken;
+					int index = tokens[0].length();
+					String text = line.substring(index).trim();
+
+					// exclude empty sentences
+					if (!text.isEmpty() && !text.matches("\\s")) {
+						sentence = new Sentence(score, text);
+					}
+				}
 
             } catch (NumberFormatException exception) {
                 System.out.println("NumberFormatException: " + exception.getMessage());
-                exception.printStackTrace();
             }
         }
 	    return sentence;
@@ -167,7 +177,7 @@ public class Analyzer {
 	private static List<String> getStringsFromSentence(String sentence) {
 		List<String> strings = new LinkedList<>();
 
-		if (sentence != null && !sentence.isEmpty()) {
+		if (sentence != null && !sentence.isEmpty() && !sentence.matches("\\s")) {
 			String[] tokens = sentence.toLowerCase().split("\\s");
 			for (String token : tokens) {
 				// retain only words that start with a letter
@@ -182,6 +192,20 @@ public class Analyzer {
 			}
 		}
 		return strings;
+	}
+
+	/**
+	 * Determine whether a given score is part of the valid range
+	 * @param scoreToken the input score
+	 * @return true if the score is in the valid range
+	 * 		   false otherwise
+	 */
+	private static boolean isValidScore(double scoreToken) {
+		return scoreToken == -2.0
+				|| scoreToken == -1.0
+				|| scoreToken == 0.0
+				|| scoreToken == 1.0
+				|| scoreToken == 2.0;
 	}
 
 
@@ -219,9 +243,12 @@ public class Analyzer {
 			}
 		}
 
-		String text = "4 what Did you do?";
+		String text = "4.8 what Did you do?";
 		String[] tokens = text.split("\\s");
 		System.out.println(tokens[0]);
+		int index = tokens[0].length();
+		System.out.println("rest of text is " + text.substring(index).trim());
 		*/
+
 	}
 }

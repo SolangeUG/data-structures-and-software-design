@@ -223,7 +223,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	 * 		   or -1 if the value is not found in the subtree
 	 */
 	private int depth(Node node, E val) {
-		if (node != null && val != null) {
+		if (node != null && findNode(val) != null) {
 			if (val.equals(node.value)) {
 				return 0;
 			} else if (val.compareTo(node.value) > 0) {
@@ -257,7 +257,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	 */
 	private int height(Node node) {
 		if (node == null) {
-			return 0;
+			return -1;
 		}
 
 		int leftHeight = 0;
@@ -331,6 +331,64 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			return result;
 		}
 		return false;
+	}
+
+	/**
+	 * Tester method
+	 * @param args program arguments
+	 */
+	public static void main(String[] args) {
+
+		boolean treeBal;
+		boolean nodeBal;
+		BinarySearchTree<String> bst = new BinarySearchTree<>();
+		bst.add("dog");
+		bst.add("cat");
+		bst.add("pig");
+
+		treeBal = bst.isBalanced();
+		System.out.println("TRUE | Is tree(dog, cat, pig) balanced? " + treeBal);
+
+		bst.add("ant");
+		treeBal = bst.isBalanced();
+		System.out.println("TRUE | Is tree(dog, cat, pig, ant) balanced? " + treeBal);
+
+		bst.add("skunk");
+		treeBal = bst.isBalanced();
+		System.out.println("TRUE | Is tree(dog, cat, pig, skunk) balanced? " + treeBal);
+
+		bst.add("skunk");
+		bst.add("zebra");
+		treeBal = bst.isBalanced();
+		System.out.println("FALSE | Is tree(dog, cat, pig, skunk, zebra) balanced? " + treeBal);
+
+		bst.add("ant");
+		bst.add("aah!");
+		treeBal = bst.isBalanced();
+		System.out.println("FALSE | Is tree(dog, cat, pig, ant, aah!) balanced? " + treeBal);
+
+		bst.add("ant");
+		bst.add("aah!");
+
+		nodeBal = bst.isBalanced(bst.findNode("dog"));
+		System.out.println("FALSE | Is node(dog) balanced? " + nodeBal);
+
+		bst.add("skunk");
+		bst.add("zebra");
+		treeBal = bst.isBalanced();
+		System.out.println("FALSE | Is tree(dog, cat, pig, ant, aah!, skunk, zebra) balanced? " + treeBal);
+
+		String[] values = {"dog", "cat", "pig", "ant", "aah!", "skunk", "zebra"};
+		for (String value: values) {
+			int ht = bst.height(bst.findNode(value));
+			System.out.println("Height of node(" + value + ") is " + ht);
+
+			nodeBal = bst.isBalanced(bst.findNode(value));
+			System.out.println("Is node(" + value + ") balanced? " + nodeBal);
+		}
+
+		nodeBal = bst.isBalanced(bst.findNode("ant"));
+		System.out.println("FALSE | Is node(ant) balanced? " + nodeBal);
 	}
 
 }

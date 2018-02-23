@@ -16,6 +16,7 @@ This is a collection of projects specified in the PennEngineering Extension Scho
 2. [Queues and Stacks](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/02-queues-and-stacks)
 3. [Collections](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/03-collections)
 4. [Binary Search Trees](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/04-binary-search-trees)
+5. [TreeMaps and PriorityQueues](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/05-treemaps-and-priority-queues)
 
 ## Resources
 

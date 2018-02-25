@@ -61,26 +61,45 @@ public class MovieRatingsProcessor {
 		TreeMap<String, Integer> result = new TreeMap<>();
 
 		if (movieRatings != null && !movieRatings.isEmpty()) {
-            movieRatings.forEach((title, ratings) -> {
-                int count = 0;
-                // remove all the ratings that are below than the input rating
-                for(Integer value: ratings) {
-                    if (value < rating) {
-                        ratings.remove(value);
-                        count++;
-                    }
-                }
 
-                // remove treemap entry if its queue is empty
-                if (ratings.isEmpty()) {
-                    movieRatings.remove(title);
-                }
+			List<String> toBeRemoved = new LinkedList<>();
 
-                // add the title to the list of removed movie ratings
-                if (count > 0) {
-                    result.put(title, count);
-                }
+			movieRatings.forEach((title, ratings) -> {
+                // determine if this title's ratings are concerned
+				// ie: if the head of the queue is less than the input rating
+				if (ratings.peek() < rating) {
+					toBeRemoved.add(title);
+				}
             });
+
+			if (! toBeRemoved.isEmpty()) {
+				for (String title : toBeRemoved) {
+					int count = 0;
+
+					// remove all the ratings that are below the input rating from the queue
+					PriorityQueue<Integer> ratings = movieRatings.get(title);
+					int head = ratings.peek();
+					while (head < rating && head > -1) {
+						ratings.poll();
+						count++;
+						if (ratings.isEmpty()) {
+							head = -1;
+						} else  {
+							head = ratings.peek();
+						}
+					}
+
+					// if the queue is now empty, remove its entry from the treemap
+					if (ratings.isEmpty()) {
+						movieRatings.remove(title);
+					}
+
+					// add the title to the list of removed movie ratings
+					if (count > 0) {
+						result.put(title, count);
+					}
+				}
+			}
         }
 
 		return result;

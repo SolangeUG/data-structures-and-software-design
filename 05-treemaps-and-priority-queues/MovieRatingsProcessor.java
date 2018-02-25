@@ -32,10 +32,22 @@ public class MovieRatingsProcessor {
 	 */
 	public static List<String> getAlphabeticalMoviesAboveRating(
 								TreeMap<String, PriorityQueue<Integer>> movieRatings, int rating) {
-		
-		/* IMPLEMENT THIS METHOD! */
-		
-		return null;
+        List<String> movies = new LinkedList<>();
+
+		if (movieRatings != null && !movieRatings.isEmpty()) {
+            String firstTitle = movieRatings.firstKey();
+            SortedMap<String, PriorityQueue<Integer>> sortedMap = movieRatings.tailMap(firstTitle);
+
+            // filter titles whose smallest rating is greater than the input rating
+            for (String title: sortedMap.keySet()) {
+                PriorityQueue<Integer> ratings = sortedMap.get(title);
+                if (ratings.peek() > rating) {
+                    movies.add(title);
+                }
+            }
+        }
+
+		return movies;
 	}
 
 	/**
@@ -48,7 +60,7 @@ public class MovieRatingsProcessor {
 												TreeMap<String, PriorityQueue<Integer>> movieRatings, int rating) {
 		
 		/* IMPLEMENT THIS METHOD! */
-		
+
 		return null;
 	}
 }

@@ -58,9 +58,31 @@ public class MovieRatingsProcessor {
 	 */
 	public static TreeMap<String, Integer> removeAllRatingsBelow(
 												TreeMap<String, PriorityQueue<Integer>> movieRatings, int rating) {
-		
-		/* IMPLEMENT THIS METHOD! */
+		TreeMap<String, Integer> result = new TreeMap<>();
 
-		return null;
+		if (movieRatings != null && !movieRatings.isEmpty()) {
+            movieRatings.forEach((title, ratings) -> {
+                int count = 0;
+                // remove all the ratings that are below than the input rating
+                for(Integer value: ratings) {
+                    if (value < rating) {
+                        ratings.remove(value);
+                        count++;
+                    }
+                }
+
+                // remove treemap entry if its queue is empty
+                if (ratings.isEmpty()) {
+                    movieRatings.remove(title);
+                }
+
+                // add the title to the list of removed movie ratings
+                if (count > 0) {
+                    result.put(title, count);
+                }
+            });
+        }
+
+		return result;
 	}
 }

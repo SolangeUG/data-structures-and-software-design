@@ -1,6 +1,4 @@
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * SD2x Homework #5 - Movie Rating Processor
@@ -12,15 +10,18 @@ import java.util.TreeMap;
 public class MovieRatingsProcessor {
 
 	/**
-	 * Return a list of movie titles
+	 * Return a list of movie titles in alphabetical order
 	 * @param movieRatings input movie ratings
 	 * @return the list of titles from the input data
 	 */
 	public static List<String> getAlphabeticalMovies(TreeMap<String, PriorityQueue<Integer>> movieRatings) {
-		
-		/* IMPLEMENT THIS METHOD! */
-		
-		return null;
+		List<String> movies = new LinkedList<>();
+		if (movieRatings != null && !movieRatings.isEmpty()) {
+            String firstTitle = movieRatings.firstKey();
+            SortedMap<String, PriorityQueue<Integer>> sortedMap = movieRatings.tailMap(firstTitle);
+            movies.addAll(sortedMap.keySet());
+        }
+		return movies;
 	}
 
 	/**

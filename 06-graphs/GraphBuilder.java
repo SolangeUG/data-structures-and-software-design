@@ -1,13 +1,16 @@
-
-
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
+/**
+ * A utility class to create directed and undirected graphs
+ */
 public class GraphBuilder {
-		
+
+	/**
+	 * Return a directed graph from a source file
+	 * @param filename the data file
+	 * @return a directed graph from the supplied data
+	 */
 	public static DirectedGraph buildDirectedGraph(String filename) {
 		DirectedGraph dg = new DirectedGraph();
 		try {
@@ -19,7 +22,12 @@ public class GraphBuilder {
 		}
 		return dg;
 	}
-	
+
+	/**
+	 * Return an undirected graph from a source file
+	 * @param filename the data file
+	 * @return an undirected graph from the supplied data
+	 */
 	public static UndirectedGraph buildUndirectedGraph(String filename) {
 		UndirectedGraph ug = new UndirectedGraph();
 		try {
@@ -31,7 +39,13 @@ public class GraphBuilder {
 		}
 		return ug;
 	}
-	
+
+	/**
+	 * Create relationships in a graph
+	 * @param graph the input graph to build
+	 * @param filename the file containing the graph relationships
+	 * @throws Exception if the file does not exist or cannot be read
+	 */
 	protected static void buildGraph(Graph graph, String filename) throws Exception {
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 		    String line;

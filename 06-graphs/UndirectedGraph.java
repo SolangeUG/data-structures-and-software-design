@@ -1,12 +1,22 @@
-
-
-
+/**
+ * A concrete class that represents an undirected graph
+ */
 public class UndirectedGraph extends Graph {
-	
+
+	/**
+	 * Constructor
+	 */
 	public UndirectedGraph() {
 		super();
 	}
-	
+
+	/**
+	 * Add an edge to the graph
+	 * @param node1 the source node
+	 * @param node2 the desctination node
+	 * @return true if the operation succeeds
+	 * 		   false otherwise
+	 */
 	@Override
 	public boolean addEdge(Node node1, Node node2) {
 		addNode(node1); // only adds if node not already in graph.
@@ -20,6 +30,13 @@ public class UndirectedGraph extends Graph {
 		return addEdgeSuccess;	
 	}
 
+	/**
+	 * Remove an edge from the graph
+	 * @param node1 the source node
+	 * @param node2 the destination node
+	 * @return true if the operation succeeds
+	 * 		   false otherwise
+	 */
 	@Override
 	public boolean removeEdge(Node node1, Node node2) {
 		if (!containsNode(node1) || !containsNode(node2)) {

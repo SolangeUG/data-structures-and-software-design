@@ -19,9 +19,27 @@ public class GraphUtils {
 	 * @return the shortest distance between the two elements
 	 */
 	public static int minDistance(Graph graph, String src, String dest) {
+		int result = -1;
 
-		
-		return -2;
+		if (graph != null) {
+			Node source = graph.getNode(src);
+			if (source != null) {
+				Node destination = graph.getNode(dest);
+				if (destination != null) {
+					// search for the shortest path between the source and destination nodes
+					BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(graph);
+
+					// min distance is the number of edges traversed by the BFS algorithm
+					boolean pathExists = breadthFirstSearch.bfs(source, dest);
+					if (pathExists) {
+						// remove 1 from the total number of nodes marked by the BFS algorithm
+						result = breadthFirstSearch.marked.size() - 1;
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -49,5 +67,5 @@ public class GraphUtils {
 		
 		return true;
 	}
-	
+
 }

@@ -18,7 +18,7 @@ public class BreadthFirstSearch {
 	 * @param graphToSearch the input graph
 	 */
 	public BreadthFirstSearch(Graph graphToSearch) {
-		marked = new HashSet<Node>();
+		marked = new HashSet<>();
 		graph = graphToSearch;
 	}
 
@@ -36,7 +36,7 @@ public class BreadthFirstSearch {
 		if (start.getElement().equals(elementToFind)) {
 			return true;
 		}
-		Queue<Node> toExplore = new LinkedList<Node>();
+		Queue<Node> toExplore = new LinkedList<>();
 		marked.add(start);
 		toExplore.add(start);
 		while (!toExplore.isEmpty()) {

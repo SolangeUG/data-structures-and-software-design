@@ -95,9 +95,43 @@ public class GraphUtils {
 	 * 		   false otherwise
 	 */
 	public static boolean isHamiltonianPath(Graph g, List<String> values) {
+		boolean isHamiltonian = false;
 
-		
-		return true;
+		if (g != null && values != null && !values.isEmpty()) {
+			// arbitrarily chose a source node
+			String src = values.get(0);
+			Node source = g.getNode(src);
+			if (source != null) {
+				Set<String> visited = new HashSet<>();
+
+				// use the BFS to determine a path between source and dest
+				BreadthFirstSearch algorithm = new BreadthFirstSearch(g);
+
+				// make sure there exists a path from the source to every other element of the list
+				for (String value: values) {
+					algorithm.clear();
+					if (! value.equals(src)) {
+						boolean pathExists = algorithm.bfs(source, value);
+						// exist as soon as a path is not found between two values
+						if (! pathExists) {
+							return false;
+						}
+
+						// add marked nodes to visited
+						for (Node node: algorithm.getMarked()) {
+							if (! visited.contains(node.getElement())) {
+								visited.add(node.getElement());
+							}
+						}
+					}
+				}
+
+				// at this point, a path exists between the source node and each value of the list
+				// finally, make sure all provided values have been visited/marked
+				isHamiltonian = visited.containsAll(values);
+			}
+		}
+		return isHamiltonian;
 	}
 
 }

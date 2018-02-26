@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class GraphUtils {
 					boolean pathExists = breadthFirstSearch.bfs(source, dest);
 					if (pathExists) {
 						// remove 1 from the total number of nodes marked by the BFS algorithm
-						result = breadthFirstSearch.marked.size() - 1;
+						result = breadthFirstSearch.getMarked().size() - 1;
 					}
 				}
 			}
@@ -50,9 +51,40 @@ public class GraphUtils {
 	 * @return the set of all elements within distance of the source element
 	 */
 	public static Set<String> nodesWithinDistance(Graph graph, String src, int distance) {
+		Set<String> result = null;
 
-		
-		return null;
+		if (graph != null && distance >= 1) {
+			Node source = graph.getNode(src);
+			if (source != null) {
+				// initialize result set
+				result = new HashSet<>();
+
+				// use BFS algorithm for shortest pathts
+				BreadthFirstSearch algorithm = new BreadthFirstSearch(graph);
+
+				Set<Node> allNodes = graph.getAllNodes();
+				for (Node node: allNodes) {
+					boolean withinReach = algorithm.bfs(source, node.getElement());
+					if (withinReach) {
+						// keep track of all the nodes visited within this distance
+						Set<Node> visitedNodes = algorithm.getMarked();
+						int dist = visitedNodes.size() -1;
+						if (dist <= distance) {
+							for (Node visited: visitedNodes) {
+								// exclude the source node itself
+								if (! visited.getElement().equals(src)) {
+									result.add(visited.getElement());
+								}
+							}
+						}
+					}
+
+					// reset visited nodes before next search
+					algorithm.clear();
+				}
+			}
+		}
+		return result;
 	}
 
 	/**

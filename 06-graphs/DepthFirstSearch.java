@@ -16,7 +16,7 @@ public class DepthFirstSearch {
 	 * @param graphToSearch the input graph
 	 */
 	public DepthFirstSearch(Graph graphToSearch) {
-		marked = new HashSet<Node>();
+		marked = new HashSet<>();
 		graph = graphToSearch;
 	}
 

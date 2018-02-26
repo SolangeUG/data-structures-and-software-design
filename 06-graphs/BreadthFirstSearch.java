@@ -53,6 +53,23 @@ public class BreadthFirstSearch {
 		}
 		return false;
 	}
+
+	/**
+	 * Return the set of marked nodes
+	 * @return marked
+	 */
+	public Set<Node> getMarked() {
+		return marked;
+	}
+
+	/**
+	 * Reset set of marked/visited nodes
+	 */
+	public void clear() {
+		if (marked != null) {
+			marked.clear();
+		}
+	}
 	
 
 }

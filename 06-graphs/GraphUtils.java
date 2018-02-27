@@ -33,8 +33,9 @@ public class GraphUtils {
 					// min distance is the number of edges traversed by the BFS algorithm
 					boolean pathExists = breadthFirstSearch.bfs(source, dest);
 					if (pathExists) {
-						// remove 1 from the total number of nodes marked by the BFS algorithm
-						result = breadthFirstSearch.getMarked().size() - 1;
+						// remove 1 from the total number of nodes in the path found by the BFS algorithm
+						List<Node> path = breadthFirstSearch.getPath();
+						result = path.size() - 1;
 					}
 				}
 			}
@@ -132,6 +133,21 @@ public class GraphUtils {
 			}
 		}
 		return isHamiltonian;
+	}
+
+	/**
+	 * Tester method
+	 * @param args program arguments
+	 */
+	public static void main(String[] args) {
+
+		DirectedGraph directedGraph = GraphBuilder.buildDirectedGraph("graph_builder_test.txt");
+		int minDistance = GraphUtils.minDistance(directedGraph, "0", "6");
+		System.out.println("directed minDistance is " + minDistance);
+
+		UndirectedGraph undirectedGraph = GraphBuilder.buildUndirectedGraph("graph_builder_test.txt");
+		minDistance = GraphUtils.minDistance(undirectedGraph, "0", "0");
+		System.out.println("undirected minDistance is " + minDistance);
 	}
 
 }

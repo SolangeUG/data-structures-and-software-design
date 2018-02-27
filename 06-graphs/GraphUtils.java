@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -88,40 +89,73 @@ public class GraphUtils {
 		boolean isHamiltonian = false;
 
 		if (g != null && values != null && !values.isEmpty()) {
-			// arbitrarily chose a source node
-			String src = values.get(0);
-			Node source = g.getNode(src);
-			if (source != null) {
-				Set<String> visited = new HashSet<>();
 
-				// use the BFS to determine a path between source and dest
-				BreadthFirstSearch algorithm = new BreadthFirstSearch(g);
-
-				// make sure there exists a path from the source to every other element of the list
-				for (String value: values) {
-					algorithm.clear();
-					if (! value.equals(src)) {
-						boolean pathExists = algorithm.bfs(source, value);
-						// exist as soon as a path is not found between two values
-						if (! pathExists) {
-							return false;
-						}
-
-						// add marked nodes to visited
-						for (Node node: algorithm.getMarked()) {
-							if (! visited.contains(node.getElement())) {
-								visited.add(node.getElement());
-							}
-						}
-					}
-				}
-
-				// at this point, a path exists between the source node and each value of the list
-				// finally, make sure all provided values have been visited/marked
-				isHamiltonian = visited.containsAll(values);
+			// are all the values in the graph?
+			if (! arePathValuesValid(g, values)) {
+				return false;
 			}
+
+			// a Hamiltonian path must contain the source node twice exactly!
+			String source = getSourceElement(values);
+			if (source == null)  {
+				return false;
+			}
+
+			// variable initialization
+			Node sourceNode = g.getNode(source);
+			Set<String> visited = new HashSet<>();
+			BreadthFirstSearch algorithm = new BreadthFirstSearch(g);
+
+			// is each value in the list reachable from the src element?
+			for (String value : values) {
+				//TODO find something that works!
+			}
+
+			// finally are all the values in the set of marked nodes?
+			isHamiltonian = visited.containsAll(values);
+
 		}
 		return isHamiltonian;
+	}
+
+	/**
+	 * Determine whether all the elements in the list are in the graph
+	 * @param graph the graph to be explored
+	 * @param values the list of elements
+	 * @return true if all the elements of the list are in the graph
+	 * 		   false otherwise
+	 */
+	private static boolean arePathValuesValid(Graph graph, List<String> values) {
+		boolean result = false;
+
+		if (values != null && graph != null) {
+			for (String value : values) {
+				result = graph.containsElement(value);
+				if (! result) {
+					return false;
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Identify the source element from a potential cyclic path
+	 * @param values the list of elements
+	 * @return the source element if present exactly twice
+	 * 		   null otherwise
+	 */
+	private static String getSourceElement(List<String> values) {
+		String source = null;
+		boolean sourceFound;
+		for (String value : values) {
+			sourceFound = values.indexOf(value) != values.lastIndexOf(value);
+			if (sourceFound) {
+				source = value;
+				break;
+			}
+		}
+		return source;
 	}
 
 	/**
@@ -130,15 +164,27 @@ public class GraphUtils {
 	 */
 	public static void main(String[] args) {
 
-//		DirectedGraph graph = GraphBuilder.buildDirectedGraph("graph_builder_test.txt");
-//		Set nodesWithinDistance = GraphUtils.nodesWithinDistance(graph, "1", 1);
-//		System.out.println(nodesWithinDistance);
-//		System.out.println(nodesWithinDistance.size());
+		List<String> var1 = createValidPath();
 
-//		UndirectedGraph var1 = GraphBuilder.buildUndirectedGraph("graph_builder_test.txt");
-//		Set var2 = GraphUtils.nodesWithinDistance(var1, "banana", 3);
-//		System.out.println("var2 = " + var2);
-//		System.out.println("var2.size() = " + var2.size());
+		UndirectedGraph var2 = GraphBuilder.buildUndirectedGraph("is_hamiltonian_path_test.txt");
+		boolean var3 = GraphUtils.isHamiltonianPath(var2, var1);
+		System.out.println("Is it Hamiltonian? " + var3);
+
+//		UndirectedGraph var2 = GraphBuilder.buildUndirectedGraph("is_hamiltonian_path_test.txt");
+//		boolean var3 = GraphUtils.isHamiltonianPath(var2, var1);
+//		System.out.println("Is it Hamiltonian? " + var3);
+	}
+
+	protected static List<String> createValidPath() {
+		List<String> var1 = new LinkedList<>();
+		var1.add("0");
+		var1.add("1");
+		var1.add("2");
+		var1.add("3");
+		var1.add("4");
+		var1.add("5");
+		var1.add("0");
+		return var1;
 	}
 
 }

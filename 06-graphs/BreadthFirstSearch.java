@@ -38,6 +38,10 @@ public class BreadthFirstSearch {
 		if (!graph.containsNode(start)) {
 			return false;
 		}
+
+		// reinitialize marked and parent data structures
+		this.clear();
+
 		if (start.getElement().equals(elementToFind)) {
 			// keep track of the node from which we explore the current node
 			parent.put(start, start);
@@ -95,7 +99,7 @@ public class BreadthFirstSearch {
 	/**
 	 * Reset set of marked/visited nodes
 	 */
-	public void clear() {
+	private void clear() {
 		if (marked != null) {
 			marked.clear();
 		}

@@ -23,8 +23,8 @@ public abstract class Graph {
 	 * Constructor
 	 */
 	public Graph() {
-		adjacencySets = new HashMap<Node, Set<Edge>>();
-		elementToNode = new HashMap<String, Node>();
+		adjacencySets = new HashMap<>();
+		elementToNode = new HashMap<>();
 		numNodes = 0;
 		numEdges = 0;
 	}
@@ -39,7 +39,7 @@ public abstract class Graph {
 		if (newNode == null || containsNode(newNode)) {
 			return false;
 		}
-		Set<Edge> newAdjacencySet = new HashSet<Edge>();
+		Set<Edge> newAdjacencySet = new HashSet<>();
 		adjacencySets.put(newNode, newAdjacencySet);
 		elementToNode.put(newNode.getElement(), newNode);
 		numNodes++;
@@ -56,7 +56,7 @@ public abstract class Graph {
 			return null;
 		}
 		Set<Edge> nodeEdges = adjacencySets.get(node);
-		Set<Node> nodeNeighbors= new HashSet<Node>();
+		Set<Node> nodeNeighbors= new HashSet<>();
 		for (Edge e : nodeEdges) {
 			Node neighbor = e.getDestination();
 			nodeNeighbors.add(neighbor);

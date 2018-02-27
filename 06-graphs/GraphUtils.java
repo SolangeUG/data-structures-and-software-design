@@ -55,33 +55,22 @@ public class GraphUtils {
 		Set<String> result = null;
 
 		if (graph != null && distance >= 1) {
-			Node source = graph.getNode(src);
-			if (source != null) {
+			// does the graph contain the src element?
+			if (graph.containsElement(src)) {
+
 				// initialize result set
 				result = new HashSet<>();
 
-				// use BFS algorithm for shortest pathts
-				BreadthFirstSearch algorithm = new BreadthFirstSearch(graph);
-
 				Set<Node> allNodes = graph.getAllNodes();
 				for (Node node: allNodes) {
-					boolean withinReach = algorithm.bfs(source, node.getElement());
-					if (withinReach) {
-						// keep track of all the nodes visited within this distance
-						Set<Node> visitedNodes = algorithm.getMarked();
-						int dist = visitedNodes.size() -1;
-						if (dist <= distance) {
-							for (Node visited: visitedNodes) {
-								// exclude the source node itself
-								if (! visited.getElement().equals(src)) {
-									result.add(visited.getElement());
-								}
-							}
+					String element = node.getElement();
+					if (! element.equals(src)) {
+						// compute the minDistance of each node to the src element
+						int dist = minDistance(graph, src, element);
+						if (dist > -1 && dist <= distance) {
+							result.add(node.getElement());
 						}
 					}
-
-					// reset visited nodes before next search
-					algorithm.clear();
 				}
 			}
 		}
@@ -141,13 +130,15 @@ public class GraphUtils {
 	 */
 	public static void main(String[] args) {
 
-		DirectedGraph directedGraph = GraphBuilder.buildDirectedGraph("graph_builder_test.txt");
-		int minDistance = GraphUtils.minDistance(directedGraph, "0", "6");
-		System.out.println("directed minDistance is " + minDistance);
+//		DirectedGraph graph = GraphBuilder.buildDirectedGraph("graph_builder_test.txt");
+//		Set nodesWithinDistance = GraphUtils.nodesWithinDistance(graph, "1", 1);
+//		System.out.println(nodesWithinDistance);
+//		System.out.println(nodesWithinDistance.size());
 
-		UndirectedGraph undirectedGraph = GraphBuilder.buildUndirectedGraph("graph_builder_test.txt");
-		minDistance = GraphUtils.minDistance(undirectedGraph, "0", "0");
-		System.out.println("undirected minDistance is " + minDistance);
+//		UndirectedGraph var1 = GraphBuilder.buildUndirectedGraph("graph_builder_test.txt");
+//		Set var2 = GraphUtils.nodesWithinDistance(var1, "banana", 3);
+//		System.out.println("var2 = " + var2);
+//		System.out.println("var2.size() = " + var2.size());
 	}
 
 }

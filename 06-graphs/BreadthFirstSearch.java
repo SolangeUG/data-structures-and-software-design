@@ -99,6 +99,9 @@ public class BreadthFirstSearch {
 		if (marked != null) {
 			marked.clear();
 		}
+		if (parent != null) {
+			parent.clear();
+		}
 	}
 	
 

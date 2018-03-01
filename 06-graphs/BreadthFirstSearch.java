@@ -64,6 +64,7 @@ public class BreadthFirstSearch {
 		List<Node> path = new LinkedList<>();
 
 		boolean found = false;
+		marked.clear();
 		// parentMap is the map that links each node to the one from which it was discovered
 		Map<Node, Node> parentMap = new HashMap<>();
 

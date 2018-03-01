@@ -10,13 +10,6 @@ public class BreadthFirstSearch {
 	protected Set<Node> marked;
 	protected Graph graph;
 
-	// keep track of the start node
-	private Node start;
-	// keep track of the goal node
-	private Node goal;
-	// keep track of nodes from which we explore the current node
-	private Map<Node, Node> parent;
-
 	/**
 	 * Constructor
 	 * @param graphToSearch the input graph
@@ -24,7 +17,6 @@ public class BreadthFirstSearch {
 	public BreadthFirstSearch(Graph graphToSearch) {
 		marked = new HashSet<>();
 		graph = graphToSearch;
-		parent = new HashMap<>();
 	}
 
 	/**
@@ -39,18 +31,9 @@ public class BreadthFirstSearch {
 			return false;
 		}
 
-		// reinitialize marked and parent data structures
-		this.clear();
-
 		if (start.getElement().equals(elementToFind)) {
-			// keep track of the node from which we explore the current node
-			parent.put(start, start);
 			return true;
 		}
-
-		// keep track of the start and goal nodes in order to reconstruct the path
-		this.start = start;
-		this.goal = graph.getNode(elementToFind);
 
 		Queue<Node> toExplore = new LinkedList<>();
 		marked.add(start);
@@ -59,9 +42,6 @@ public class BreadthFirstSearch {
 			Node current = toExplore.remove();
 			for (Node neighbor : graph.getNodeNeighbors(current)) {
 				if (! marked.contains(neighbor)) {
-					// keep track of the parent node from which we will explore the neighbor node
-					parent.put(neighbor, current);
-					
 					if (neighbor.getElement().equals(elementToFind)) {
 						return true;
 					}
@@ -74,39 +54,69 @@ public class BreadthFirstSearch {
 	}
 
 	/**
-	 * Return the path if one was found by the BFS algorithm
-	 * @return the path from the start to the goal nodes
+	 * Compute the shortest path between two nodes of the graph if it exists
+	 * @param source the source node
+	 * @param goal the end node
+	 * @return the shortest path if it exists
+	 * 		   an empty list if no path exists between the two nodes
 	 */
-	public List<Node> getPath() {
-		LinkedList<Node> path = new LinkedList<>();
-		Node current = goal;
-		while (current != start && current != null) {
-			path.addFirst(current);
-			current = parent.get(current);
+	public List<Node> bfs(Node source, Node goal) {
+		List<Node> path = new LinkedList<>();
+
+		boolean found = false;
+		// parentMap is the map that links each node to the one from which it was discovered
+		Map<Node, Node> parentMap = new HashMap<>();
+
+		Queue<Node> toExplore = new LinkedList<>();
+		toExplore.add(source);
+
+		while (! toExplore.isEmpty()) {
+			Node current = toExplore.poll();
+
+			if (current == goal) {
+				found = true;
+				break;
+			}
+
+			// add current's neighbors to the queue
+			List<Node> neighbors = new LinkedList<>(graph.getNodeNeighbors(current));
+			ListIterator<Node> it = neighbors.listIterator(neighbors.size());
+			while (it.hasPrevious()) {
+				Node next = it.previous();
+				if (! marked.contains(next)) {
+					marked.add(next);
+					parentMap.put(next, current);
+					toExplore.add(next);
+				}
+			}
 		}
-		path.addFirst(start);
+
+		// if a path was found, reconstruct the path
+		if (found) {
+			path = constructPath(source, goal, parentMap);
+		}
+
 		return path;
 	}
 
 	/**
-	 * Return the set of marked nodes
-	 * @return marked
+	 * Construct the path found by the BFS method
+	 * @param start	The starting node in the graph
+	 * @param goal	The goal node in the graph
+	 * @param parentMap The map that links each node to the one
+	 * 					from which it was discovered
+	 * @return the reconstructed path from the start node to the goal node
 	 */
-	public Set<Node> getMarked() {
-		return marked;
-	}
-
-	/**
-	 * Reset set of marked/visited nodes
-	 */
-	private void clear() {
-		if (marked != null) {
-			marked.clear();
+	private List<Node> constructPath(Node start, Node goal, Map<Node, Node> parentMap) {
+		LinkedList<Node> path = new LinkedList<>();
+		// Reconstruction of the path from the goal node back to the start node
+		Node current = goal;
+		while (current != start) {
+			path.addFirst(current);
+			current = parentMap.get(current);
 		}
-		if (parent != null) {
-			parent.clear();
-		}
+		path.addFirst(start);
+		return path;
 	}
-	
 
 }

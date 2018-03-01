@@ -24,20 +24,22 @@ public class GraphUtils {
 		int result = -1;
 
 		if (graph != null) {
-			Node source = graph.getNode(src);
-			if (source != null) {
-				Node destination = graph.getNode(dest);
-				if (destination != null) {
-					// search for the shortest path between the source and destination nodes
-					BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(graph);
+			// ensure that src and dest do exist in the graph
+			boolean nodesExist = graph.containsElement(src) && graph.containsElement(dest);
 
-					// min distance is the number of edges traversed by the BFS algorithm
-					boolean pathExists = breadthFirstSearch.bfs(source, dest);
-					if (pathExists) {
-						// remove 1 from the total number of nodes in the path found by the BFS algorithm
-						List<Node> path = breadthFirstSearch.getPath();
-						result = path.size() - 1;
-					}
+			if (nodesExist) {
+
+				Node source = graph.getNode(src);
+				Node destination = graph.getNode(dest);
+
+				// search for the shortest path between the source and destination nodes
+				BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(graph);
+
+				// min distance is the number of edges traversed by the BFS algorithm
+				List<Node> path = breadthFirstSearch.bfs(source, destination);
+				if (! path.isEmpty()) {
+					// remove 1 from the total number of nodes in the path found by the BFS algorithm
+					result = path.size() -1;
 				}
 			}
 		}

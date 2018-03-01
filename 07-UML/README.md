@@ -2,6 +2,7 @@
 
 [![Java Platform](https://img.shields.io/badge/platform-Java-blue.svg)](https://docs.oracle.com/en/java/)
 [![JUnit Library](https://img.shields.io/badge/framework-JUnit-25A162.svg)](https://junit.org/junit5/)
+[![UML Specification](https://img.shields.io/badge/specification-UML-452E7F.svg)](http://www.uml.org/)
 
 The full project specification can be found [here](https://courses.edx.org/courses/course-v1:PennX+SD2x+2T2017/courseware/bd1ca9ec42034882bee3dbf3bb80c912/e387eff4315f4dce9dd0cd986e6ef82d/?child=first).
 

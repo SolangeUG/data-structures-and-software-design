@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -60,9 +61,19 @@ public class PresentationTier {
 		String author = scanner.nextLine();
 		scanner.close();
 
-		// TODO : relay this to the business logic unit
-		// TODO : display the results
-		// TODO : then terminate the program
+		// relay the request to the business logic unit
+		List<String> titles = this.logicTier.findBookTitlesByAuthor(author);
+		StringBuilder builder = new StringBuilder("Results: \n");
+		for (String title: titles) {
+			builder.append(title);
+			builder.append("\n");
+		}
+
+		// display the results
+		System.out.println(builder.toString());
+
+		// then terminate the program
+		System.exit(0);
 	}
 
 	/**
@@ -79,9 +90,12 @@ public class PresentationTier {
 		String year = scanner.nextLine();
 		scanner.close();
 
-		// TODO : relay this to the business logic unit
-		// TODO : display the results
-		// TODO : then terminate the program
+		// relay the request to the business logic unit
+		int books = this.logicTier.findNumberOfBooksInYear(year);
+		// display the results
+		System.out.println("Number of books published: " + books);
+		// then terminate the program
+		System.exit(0);
 	}
 	
 

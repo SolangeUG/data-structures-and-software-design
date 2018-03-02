@@ -32,7 +32,7 @@ public class DataTier {
 			try (InputStream fileStream = new FileInputStream(fileName)) {
 				BufferedReader reader =
 						new BufferedReader(new InputStreamReader(fileStream));
-				String line = null;
+				String line;
 				while ((line = reader.readLine()) != null)  {
 					// each row of the input file is formatted as follows:
 					// [title] tab [author] tab [year]
@@ -42,7 +42,8 @@ public class DataTier {
 				}
 
 			} catch (IOException exception) {
-				System.out.println("Error while processing the data input file: " + exception.getMessage());
+				System.out.println("Error while reading and retrieving data from the input file: "
+									+ exception.getMessage());
 			}
 		}
 		return books;

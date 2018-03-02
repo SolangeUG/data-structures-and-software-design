@@ -1,8 +1,12 @@
+import java.util.Scanner;
+
 /**
  * SD2x Homework #8 - This is the User Interface
  * This class represents the Presentation Tier in the three-tier architecture.
  * Implement the appropriate methods for this tier below. 
  * Also implement the start method as described in the assignment description.
+ *
+ * @author Solange U. Gasengayire
  */
 public class PresentationTier {
 
@@ -24,23 +28,60 @@ public class PresentationTier {
 	 * Once the output has been displayed, the program terminates.
 	 */
 	public void start() {
+		Scanner scanner = new Scanner(System.in);
 
+		String prompt = "What feature of the program would you like to use?\n";
+		prompt = prompt + " Enter 1 to display books by a particular author.\n";
+		prompt = prompt + " Enter 2 to display books published in a particular year: ";
+		System.out.print(prompt);
+
+		// let's assume "normal" input values
+		int feature = scanner.nextInt();
+		scanner.close();
+
+		if (feature == 1) {
+			showBookTitlesByAuthor();
+		} else if (feature == 2) {
+			showNumberOfBooksInYear();
+		}
 	}
 
 	/**
-	 * Display the titles of books whose author name includes the input name
-	 * @param author the requested author name
+	 * Feature #01
+	 * Display the titles of books whose author name is specified by the user
 	 */
-	public void showBookTitlesByAuthor(String author) {
+	public void showBookTitlesByAuthor() {
+		Scanner scanner = new Scanner(System.in);
 
+		String prompt = "Enter name of author: ";
+		System.out.print(prompt);
+
+		// let's assume "normal" input values
+		String author = scanner.nextLine();
+		scanner.close();
+
+		// TODO : relay this to the business logic unit
+		// TODO : display the results
+		// TODO : then terminate the program
 	}
 
 	/**
-	 * Display the number of books published in the request year
-	 * @param yearString the request year
+	 * Feature #02
+	 * Display the number of books published in the year specified by the user
 	 */
-	public void showNumberOfBooksInYear(String yearString) {
+	public void showNumberOfBooksInYear() {
+		Scanner scanner = new Scanner(System.in);
 
+		String prompt = "Enter year of publication: ";
+		System.out.print(prompt);
+
+		// let's assume "normal" input values
+		String year = scanner.nextLine();
+		scanner.close();
+
+		// TODO : relay this to the business logic unit
+		// TODO : display the results
+		// TODO : then terminate the program
 	}
 	
 

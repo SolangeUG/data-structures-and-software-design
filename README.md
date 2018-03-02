@@ -2,6 +2,7 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT%20License-green.svg)](https://github.com/SolangeUG/data-structures-and-software-design/blob/master/LICENSE)
 [![Java Platform](https://img.shields.io/badge/platform-Java-blue.svg)](https://docs.oracle.com/en/java/)
+[![UML Specification](https://img.shields.io/badge/specification-UML-452E7F.svg)](http://www.uml.org/)
 
 This is a collection of projects specified in the PennEngineering Extension School's [Data Structures and Software Design](https://www.edx.org/course/data-structures-software-design-pennx-sd2x) course.
 

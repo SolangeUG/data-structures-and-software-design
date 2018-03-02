@@ -46,6 +46,7 @@ public class LogicTier {
 	public int findNumberOfBooksInYear(String year) {
 		int bookCount = 0;
 		for (Book book : books) {
+			// We're assuming "normal input values"
 			if (book.getPublicationYear() == Integer.valueOf(year)) {
 				bookCount++;
 			}

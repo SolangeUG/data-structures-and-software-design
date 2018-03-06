@@ -15,7 +15,7 @@ Your refactoring must **not** necessitate any changes to the **Client** class in
 
 After completing the above, the `NewspaperArticle` class is a bit smaller but still has many fields and methods that may be common to other types of documents, e.g. journal articles or books. By moving those fields and methods to another class, we can have a more generalizable class that can be used for representing other types of documents.
 
-**Refactor NewspaperArticle** and apply either the **Extract Class** or **Extract Superclass** pattern (you need to decide which!) to create a new class called **Document** that contains the fields and methods that would be common to all types of documents. In particular, move the `title`, `author`, `date`, and `publishing location` fields and related methods to the new Document class, but leave the rest in NewspaperArticle.
+**Refactor NewspaperArticle** and apply either the **Extract Class** or **Extract Superclass** pattern (you need to decide which!) to create a new class called **Document** that contains the fields and methods that would be common to **all** types of documents. In particular, move the `title`, `author`, `date`, and `publishing location` fields and related methods to the new Document class, but leave the rest in NewspaperArticle.
 
 While performing this refactoring, you also need to decide whether **Document** should be a `concrete class`, an `abstract class`, or an `interface`.
 

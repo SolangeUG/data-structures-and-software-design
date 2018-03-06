@@ -22,3 +22,5 @@ While performing this refactoring, you also need to decide whether **Document** 
 ## Note
 
 Your refactoring must not necessitate any changes to the **Client** class in order for it to still compile. That is, you may not change the Client class as a result of this refactoring.
+
+Please be sure that your **NewspaperArticle**, **PublishingLocation**, and **Document** classes are in the default package, that they compile, and that you have not created any additional `.java` files.

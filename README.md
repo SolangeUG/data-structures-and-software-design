@@ -21,6 +21,7 @@ This is a collection of projects specified in the PennEngineering Extension Scho
 6. [Graphs](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/06-graphs)
 7. [UML](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/07-UML)
 8. [Software Design](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/08-software-design)
+9. [Refactoring](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/09-refactoring)
 
 ## Resources
 

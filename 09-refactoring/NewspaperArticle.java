@@ -1,11 +1,12 @@
-/*
- * SD2x Homework #9
+import java.util.*;
+
+/**
+ * SD2x Homework #9 - Refactoring
  * This class represents a newspaper article.
  * Refactor the code according to the suggestions in the assignment description.
  */
-import java.util.*;
-
 public class NewspaperArticle {
+
 	private String title;
 	private String author;
 	private int startPage;
@@ -13,11 +14,12 @@ public class NewspaperArticle {
 	private Set<String> editors;
 	private String newspaper;
 	private Date date;
-	private String city;
-	private String state;
-	private String postCode;
+
+	// Refactoring: extract city, state and postCode into a new class
+	private PublishingLocation publishingLocation;
 	
-	public NewspaperArticle(String title, String author, int startPage, int endPage, Set<String> editors, String newspaper, Date date, String city, String state, String postCode) {
+	public NewspaperArticle(String title, String author, int startPage, int endPage, Set<String> editors,
+							String newspaper, Date date, String city, String state, String postCode) {
 		this.title = title;
 		this.author = author;
 		this.startPage = startPage;
@@ -25,9 +27,8 @@ public class NewspaperArticle {
 		this.editors = editors;
 		this.newspaper = newspaper;
 		this.date = date;
-		this.city = city;
-		this.state = state;
-		this.postCode  = postCode;
+		this.publishingLocation =
+				new PublishingLocation(city, state, postCode);
 	}
 	
 	public String getTitle() {
@@ -59,15 +60,23 @@ public class NewspaperArticle {
 	}
 	
 	public String getCity() {
-		return city;
+		return this.publishingLocation.getCity();
 	}
 	
 	public String getState() {
-		return state;
+		return this.publishingLocation.getState();
 	}
 	
 	public String getPostCode() {
-		return postCode;
+		return this.publishingLocation.getPostCode();
+	}
+
+	/**
+	 * Return this article's publishing location
+	 * @return the publishing location
+	 */
+	public PublishingLocation getPublishingLocation() {
+		return this.publishingLocation;
 	}
 	
 	public int numPages(){
@@ -87,7 +96,7 @@ public class NewspaperArticle {
 	}
 	
 	public Set<String> commonEditors(NewspaperArticle article){
-		Set<String> sameEditors = new HashSet<String>();
+		Set<String> sameEditors = new HashSet<>();
 		for(String ed : article.editors){
 			if(this.editors.contains(ed)){
 				sameEditors.add(ed);

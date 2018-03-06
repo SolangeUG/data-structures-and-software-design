@@ -4,7 +4,7 @@ import java.util.Date;
  * This class represents any published document.
  * @author Solange U. Gasengayire
  */
-public class Document {
+public abstract class Document {
 
     private String title;
     private String author;
@@ -113,5 +113,35 @@ public class Document {
      */
     public String getPostCode() {
         return this.location.getPostCode();
+    }
+
+    /**
+     * Compare document's date to a general date
+     * @param date the general date
+     * @return the comparison result
+     */
+    public int compareWithGeneralDate(Date date){
+        // Refactoring: use of Extract Superclass pattern
+        return this.date.compareTo(date);
+    }
+
+    /**
+     * Compare document's date to another document's date
+     * @param article the other document
+     * @return the comparison result
+     */
+    public int compareDates(Document article){
+        // Refactoring: use of Extract Superclass pattern
+        return this.date.compareTo(article.getDate());
+    }
+
+    /**
+     * Compare this article's author to another document's author
+     * @param article the other document
+     * @return the comparison result
+     */
+    public boolean sameAuthor(Document article){
+        // Refactoring: use of Extract Superclass pattern
+        return this.author.equals(article.getAuthor());
     }
 }

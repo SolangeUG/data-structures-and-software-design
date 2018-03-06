@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * SD2x Homework #9 - Refactoring
@@ -43,11 +45,7 @@ public class NewspaperArticle extends Document {
 	public int numPages(){
 		return endPage - startPage + 1;
 	}
-	
-	public boolean sameAuthor(NewspaperArticle article){
-		// Refactoring: use of Extract Superclass pattern
-		return this.getAuthor().equals(article.getAuthor());
-	}
+
 	
 	public boolean sameNewspaper(NewspaperArticle article) {
 		return this.newspaper.equals(article.newspaper);
@@ -65,16 +63,6 @@ public class NewspaperArticle extends Document {
 			}
 		}
 		return sameEditors;
-	}
-	
-	public int compareDates(NewspaperArticle article){
-		// Refactoring: use of Extract Superclass pattern
-		return this.getDate().compareTo(article.getDate());
-	}
-	
-	public int compareWithGeneralDate(Date date){
-		// Refactoring: use of Extract Superclass pattern
-		return this.getDate().compareTo(date);
 	}
 	
 }

@@ -23,6 +23,7 @@ This is a collection of projects specified in the PennEngineering Extension Scho
 8. [Software Design](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/08-software-design)
 9. [Refactoring](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/09-refactoring)
 10. [Reliability](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/10-reliability)
+11. [Efficiency](https://github.com/SolangeUG/data-structures-and-software-design/tree/master/11-efficiency)
 
 ## Resources
 

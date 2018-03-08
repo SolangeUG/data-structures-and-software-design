@@ -161,10 +161,10 @@ public class PlagiarismDetector {
 
 		Set<String> matches = new HashSet<>();
 		for (String mine : myPhrases) {
-			for (String yours : yourPhrases) {
-				if (mine.equalsIgnoreCase(yours)) {
-					matches.add(mine);
-				}
+			// at this point in the program, all words are uppercase
+			// so, there is no need to compare word per word inside an inner loop
+			if (yourPhrases.contains(mine)) {
+				matches.add(mine);
 			}
 		}
 		return matches;

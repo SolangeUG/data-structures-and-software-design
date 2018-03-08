@@ -1,5 +1,3 @@
-
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,20 +8,26 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-/*
- * SD2x Homework #11
+/**
+ * SD2x Homework #11 - A program that attemps to detect plagiarism in a corpus of documents.
  * Improve the efficiency of the code below according to the guidelines in the assignment description.
  * Please be sure not to change the signature of the detectPlagiarism method!
  * However, you may modify the signatures of any of the other methods as needed.
  */
-
 public class PlagiarismDetector {
 
+	/**
+	 * Return a map that lists pairs of documents
+	 * @param dirName the directory containing the corpus of documents to be analyzed
+	 * @param windowSize the size of common phrases
+	 * @param threshold the limit of common phrases over which a pair of documents are considered "similar"
+	 * @return the map of documents with common phrases
+	 */
 	public static Map<String, Integer> detectPlagiarism(String dirName, int windowSize, int threshold) {
 		File dirFile = new File(dirName);
 		String[] files = dirFile.list();
 		
-		Map<String, Integer> numberOfMatches = new HashMap<String, Integer>();
+		Map<String, Integer> numberOfMatches = new HashMap<>();
 		
 		for (int i = 0; i < files.length; i++) {
 			String file1 = files[i];
@@ -56,10 +60,11 @@ public class PlagiarismDetector {
 
 	}
 
-	
-	/*
-	 * This method reads the given file and then converts it into a Collection of Strings.
-	 * It does not include punctuation and converts all words in the file to uppercase.
+	/**
+	 * Read a file into a collection of strings.
+	 * Punctuation is ignored and all words are converted to uppercase.
+	 * @param filename the file to be read
+	 * @return a collection of strings
 	 */
 	protected static List<String> readFile(String filename) {
 		if (filename == null) return null;
@@ -80,10 +85,12 @@ public class PlagiarismDetector {
 		return words;
 	}
 
-	
-	/*
-	 * This method reads a file and converts it into a Set/List of distinct phrases,
-	 * each of size "window". The Strings in each phrase are whitespace-separated.
+	/**
+	 * Read a file into a set of distinct phrases of give size.
+	 * The words in each phrase are whitespace-separated.
+	 * @param filename
+	 * @param window
+	 * @return
 	 */
 	protected static Set<String> createPhrases(String filename, int window) {
 		if (filename == null || window < 1) return null;
@@ -105,12 +112,12 @@ public class PlagiarismDetector {
 		return phrases;		
 	}
 
-	
-
-	
-	/*
-	 * Returns a Set of Strings that occur in both of the Set parameters.
-	 * However, the comparison is case-insensitive.
+	/**
+	 * Return a set of strings common to two sets of words.
+	 * The comparison is case insensitive.
+	 * @param myPhrases first set of words
+	 * @param yourPhrases other set of words
+	 * @return a set of common words
 	 */
 	protected static Set<String> findMatches(Set<String> myPhrases, Set<String> yourPhrases) {
 	
@@ -128,10 +135,13 @@ public class PlagiarismDetector {
 		}
 		return matches;
 	}
-	
-	/*
-	 * Returns a LinkedHashMap in which the elements of the Map parameter
-	 * are sorted according to the value of the Integer, in non-ascending order.
+
+
+	/**
+	 * Return a LinkedHashMap in which the elements of the Map parameter are sorted
+	 * according to the value of the Integer, in non-ascending order.
+	 * @param possibleMatches a map of possible matches
+	 * @return a sorted map
 	 */
 	protected static LinkedHashMap<String, Integer> sortResults(Map<String, Integer> possibleMatches) {
 		
@@ -162,10 +172,11 @@ public class PlagiarismDetector {
 
 		return list;
 	}
-	
-	/*
-	 * This method is here to help you measure the execution time and get the output of the program.
-	 * You do not need to consider it for improving the efficiency of the detectPlagiarism method.
+
+	/**
+	 * Tester method.
+	 * Measure the execution time and get the output of the program.
+	 * @param args program arguments
 	 */
     public static void main(String[] args) {
     	if (args.length == 0) {

@@ -24,40 +24,56 @@ public class PlagiarismDetector {
 	 * @return the map of documents with common phrases
 	 */
 	public static Map<String, Integer> detectPlagiarism(String dirName, int windowSize, int threshold) {
+
+		Map<String, Integer> numberOfMatches = null;
 		File dirFile = new File(dirName);
 		String[] files = dirFile.list();
-		
-		Map<String, Integer> numberOfMatches = new HashMap<>();
-		
-		for (int i = 0; i < files.length; i++) {
-			String file1 = files[i];
 
-			for (int j = 0; j < files.length; j++) { 
-				String file2 = files[j];
-				
-				Set<String> file1Phrases = createPhrases(dirName + "/" + file1, windowSize); 
-				Set<String> file2Phrases = createPhrases(dirName + "/" + file2, windowSize); 
-				
-				if (file1Phrases == null || file2Phrases == null)
+		if (files != null) {
+
+			// no need to create a new HashMap object before this line
+			numberOfMatches = new HashMap<>();
+
+			Set<String> file1Phrases;
+			for (String file1 : files) {
+
+				// move into the outer loop because it doesn't need to be re-evaluated into the inner loop!
+				// extract phrases from the comparator file
+				file1Phrases = createPhrases(dirName + "/" + file1, windowSize);
+				if (file1Phrases == null || file1Phrases.isEmpty()) {
 					return null;
-				
-				Set<String> matches = findMatches(file1Phrases, file2Phrases);
-				
-				if (matches == null)
-					return null;
-								
-				if (matches.size() > threshold) {
-					String key = file1 + "-" + file2;
-					if (numberOfMatches.containsKey(file2 + "-" + file1) == false && file1.equals(file2) == false) {
-						numberOfMatches.put(key,matches.size());
+				}
+
+				Set<String> file2Phrases;
+				for (String file2 : files) {
+
+					// extract phrases from the current file to compare to
+					file2Phrases = createPhrases(dirName + "/" + file2, windowSize);
+					if (file2Phrases == null || file2Phrases.isEmpty()) {
+						return null;
 					}
-				}				
-			}
-			
-		}		
-		
-		return sortResults(numberOfMatches);
 
+					// look for matches between the two sets of phrases
+					Set<String> matches = findMatches(file1Phrases, file2Phrases);
+					if (matches == null || matches.isEmpty()) {
+						return null;
+					}
+
+					int size = matches.size();
+					if (size > threshold && !file1.equals(file2)) {
+						String reversedKey = file2 + "-" + file1;
+						if (! numberOfMatches.containsKey(reversedKey)) {
+							String key = file1 + "-" + file2;
+							numberOfMatches.put(key, size);
+						}
+					}
+				}
+			}
+			// return the sorted map
+			numberOfMatches = sortResults(numberOfMatches);
+		}
+
+		return numberOfMatches;
 	}
 
 	/**
@@ -67,17 +83,24 @@ public class PlagiarismDetector {
 	 * @return a collection of strings
 	 */
 	protected static List<String> readFile(String filename) {
-		if (filename == null) return null;
-		
-		List<String> words = new LinkedList<String>();
-		
-		try {
-			Scanner in = new Scanner(new File(filename));
-			while (in.hasNext()) {
-				words.add(in.next().replaceAll("[^a-zA-Z]", "").toUpperCase());
-			}
+		// exit as soon as the input does not satisfy preconditions
+		if (filename == null) {
+			return null;
 		}
-		catch (Exception e) {
+
+		List<String> words;
+
+		// use of try-with-resources construct to make sure
+		// the scanner will be closed after the method is run...
+		// ... whether an exception occurs or not!
+		try (Scanner in = new Scanner(new File(filename))) {
+			words = new LinkedList<>();
+			String regex = "[^a-zA-Z]";
+			while (in.hasNext()) {
+				String word = in.next();
+				words.add(word.replaceAll(regex, "").toUpperCase());
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -88,25 +111,32 @@ public class PlagiarismDetector {
 	/**
 	 * Read a file into a set of distinct phrases of give size.
 	 * The words in each phrase are whitespace-separated.
-	 * @param filename
-	 * @param window
-	 * @return
+	 * @param filename the file to be read
+	 * @param window the size of the phrases
+	 * @return a set of phrases of the given size
 	 */
 	protected static Set<String> createPhrases(String filename, int window) {
-		if (filename == null || window < 1) return null;
+		// exit as soon as the input does not satisfy preconditions
+		if (window < 1 || filename == null || filename.isEmpty()) {
+			return null;
+		}
 				
 		List<String> words = readFile(filename);
-		
-		Set<String> phrases = new HashSet<String>();
-		
-		for (int i = 0; i < words.size() - window + 1; i++) {
-			String phrase = "";
+		if (words == null || words.isEmpty()) {
+			// no need to go further if there are no words to treat
+			return null;
+		}
+
+		Set<String> phrases = new HashSet<>();
+		int limit = words.size() - window + 1;
+		StringBuilder phrase;
+		for (int i = 0; i < limit; i++) {
+			// replace string concatenation inside a loop with a StringBuilder
+			phrase = new StringBuilder();
 			for (int j = 0; j < window; j++) {
-				phrase += words.get(i+j) + " ";
+				phrase.append(words.get(i + j)).append(" ");
 			}
-
-			phrases.add(phrase);
-
+			phrases.add(phrase.toString());
 		}
 		
 		return phrases;		
@@ -120,16 +150,17 @@ public class PlagiarismDetector {
 	 * @return a set of common words
 	 */
 	protected static Set<String> findMatches(Set<String> myPhrases, Set<String> yourPhrases) {
-	
-		Set<String> matches = new HashSet<String>();
-		
-		if (myPhrases != null && yourPhrases != null) {
-		
-			for (String mine : myPhrases) {
-				for (String yours : yourPhrases) {
-					if (mine.equalsIgnoreCase(yours)) {
-						matches.add(mine);
-					}
+		// exit as soon as the input does not satisfy preconditions
+		if (myPhrases == null || yourPhrases == null
+				|| myPhrases.isEmpty() || yourPhrases.isEmpty()) {
+			return null;
+		}
+
+		Set<String> matches = new HashSet<>();
+		for (String mine : myPhrases) {
+			for (String yours : yourPhrases) {
+				if (mine.equalsIgnoreCase(yours)) {
+					matches.add(mine);
 				}
 			}
 		}
@@ -147,26 +178,26 @@ public class PlagiarismDetector {
 		
 		// Because this approach modifies the Map as a side effect of printing 
 		// the results, it is necessary to make a copy of the original Map
-		Map<String, Integer> copy = new HashMap<String, Integer>();
-
+		Map<String, Integer> copy = new HashMap<>();
 		for (String key : possibleMatches.keySet()) {
 			copy.put(key, possibleMatches.get(key));
-		}	
+		}
 		
-		LinkedHashMap<String, Integer> list = new LinkedHashMap<String, Integer>();
+		LinkedHashMap<String, Integer> list = new LinkedHashMap<>();
 
 		for (int i = 0; i < copy.size(); i++) {
 			int maxValue = 0;
 			String maxKey = null;
+
 			for (String key : copy.keySet()) {
-				if (copy.get(key) > maxValue) {
-					maxValue = copy.get(key);
+				Integer value = copy.get(key);
+				if (value > maxValue) {
+					maxValue = value;
 					maxKey = key;
 				}
 			}
 			
 			list.put(maxKey, maxValue);
-			
 			copy.put(maxKey, -1);
 		}
 
@@ -183,16 +214,25 @@ public class PlagiarismDetector {
     		System.out.println("Please specify the name of the directory containing the corpus.");
     		System.exit(0);
     	}
+
     	String directory = args[0];
+
+    	// measure execution time
     	long start = System.currentTimeMillis();
     	Map<String, Integer> map = PlagiarismDetector.detectPlagiarism(directory, 4, 5);
     	long end = System.currentTimeMillis();
+
+    	// print execution time results
     	double timeInSeconds = (end - start) / (double)1000;
     	System.out.println("Execution time (wall clock): " + timeInSeconds + " seconds");
-    	Set<Map.Entry<String, Integer>> entries = map.entrySet();
-    	for (Map.Entry<String, Integer> entry : entries) {
-    		System.out.println(entry.getKey() + ": " + entry.getValue());
-    	}
+
+    	if (map != null) {
+			// print sorted resulting sorted map
+			Set<Map.Entry<String, Integer>> entries = map.entrySet();
+			for (Map.Entry<String, Integer> entry : entries) {
+				System.out.println(entry.getKey() + ": " + entry.getValue());
+			}
+		}
     }
 
 }

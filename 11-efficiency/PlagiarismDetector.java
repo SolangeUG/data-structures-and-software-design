@@ -47,25 +47,28 @@ public class PlagiarismDetector {
 				Set<String> file2Phrases;
 				for (String file2 : files) {
 
-					// extract phrases from the current file to compare to
-					file2Phrases = createPhrases(dirName + "/" + file2, windowSize);
-					if (file2Phrases == null || file2Phrases.isEmpty()) {
-						return null;
-					}
+					// no need to do any work if the files are the same
+					if (! file1.equals(file2)) {
 
-					// look for matches between the two sets of phrases
-					Set<String> matches = findMatches(file1Phrases, file2Phrases);
-					if (matches == null || matches.isEmpty()) {
-						return null;
-					}
-
-					int size = matches.size();
-					if (size > threshold && !file1.equals(file2)) {
-						String reversedKey = file2 + "-" + file1;
-						if (! numberOfMatches.containsKey(reversedKey)) {
-							String key = file1 + "-" + file2;
-							numberOfMatches.put(key, size);
+						// extract phrases from the current file to compare to
+						file2Phrases = createPhrases(dirName + "/" + file2, windowSize);
+						if (file2Phrases == null || file2Phrases.isEmpty()) {
+							return null;
 						}
+
+						// look for matches between the two sets of phrases
+						Set<String> matches = findMatches(file1Phrases, file2Phrases);
+						if (matches != null && !matches.isEmpty()) {
+							int size = matches.size();
+							if (size > threshold) {
+								String reversedKey = file2 + "-" + file1;
+								if (! numberOfMatches.containsKey(reversedKey)) {
+									String key = file1 + "-" + file2;
+									numberOfMatches.put(key, size);
+								}
+							}
+						}
+
 					}
 				}
 			}
@@ -216,6 +219,7 @@ public class PlagiarismDetector {
     	}
 
     	String directory = args[0];
+		System.out.println("Test directory is " + args[0]);
 
     	// measure execution time
     	long start = System.currentTimeMillis();
@@ -224,7 +228,7 @@ public class PlagiarismDetector {
 
     	// print execution time results
     	double timeInSeconds = (end - start) / (double)1000;
-    	System.out.println("Execution time (wall clock): " + timeInSeconds + " seconds");
+    	System.out.println("\nExecution time (wall clock): " + timeInSeconds + " seconds\n");
 
     	if (map != null) {
 			// print sorted resulting sorted map
